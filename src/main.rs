@@ -143,8 +143,27 @@ fn main() {
     println!();
     match opcion{
         1=>{
+        let mut cantidad:i32=loop{
+            print!("Por favor, la cantidad de estudiantes que desea agregar: ");
+            match leer_entrada().parse(){
+                Ok(v)=>break v,
+                Err(_)=>{
+                    println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");    
+                    println!();
+                }
+            }
+        };
+        println!();
+        for z in 1..=cantidad{
+            print!("Por favor, ingrese el nombre completo del estudiante {z}: ");
+            let mut nombre=leer_entrada();
+            let estudiantess=Estudiantes::new(nombre);
+            estudiantes.push(estudiantess);
 
-        },
+        }
+        println!("¡Estudiantes registrados correctamente!");
+        println!();
+    },
         2=>{
 
         },
@@ -163,4 +182,3 @@ fn main() {
     
     
 }
-
