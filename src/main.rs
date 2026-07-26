@@ -31,19 +31,34 @@ impl Cursos{
         }
     }
     pub fn pedir_leer()->String{
-        println!("Por favor, ingrese las notas finales de cada unidades\n(En orden-Separadas por espacios): ");
+        println!("Por favor, ingrese las nota final de cada unidad\n(En orden-Separadas por espacios): ");
         let mut entrada:String=String::new();
         io::stdout().flush().expect("Error en el forzamiento del búfer.");
         io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
         entrada.trim().to_string()
     }
-    pub fn conversionnumeros(entrada:String)->f64{
+    pub fn conversionnumeros(entrada:String)->Result<f64, Notas_invalidas>{
+        if entrada.is_empty(){
+            return Err(Notas_invalidas::EntradaVacia);
+        }
         let lista:Vec<f64>=entrada
             .split_whitespace()
             .filter_map(| x | x.parse::<f64>().ok())
             .collect();
+        if let Some(negativo)=lista.iter().find(| x | **x<0.0){
+            return Err(Notas_invalidas::NotaNegativa(*negativo));
+        }
+        else if let Some(mayor)=lista.iter().find(| x | **x>100.0){
+            return Err(Notas_invalidas::NumeroMayorA100(*mayor));
+        }
+        else if lista.iter().len()>4{
+            return Err(Notas_invalidas::ErrorMasDe4);
+        }
+
+
+    
         let total:f64=lista.iter().copied().fold(0.0, | suma, x| suma + x);
-        total
+        Ok(total)
     }
     pub fn comparacion(&self, total:f64)->String{
         let diferencia:f64=self.nota_para_ganar-total;
@@ -58,7 +73,13 @@ impl Cursos{
     
 }
 
-
+enum Notas_invalidas{
+    EntradaVacia,
+    NumeroMayorA100(f64),
+    NotaNegativa(f64),
+    ErrorMasDe4,
+    
+}
 
 struct Estudiantes{
     nombre: String,
