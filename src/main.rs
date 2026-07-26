@@ -1,3 +1,5 @@
+use std::io::{self, Write};
+
 struct Unidad{
     letra:String,
     nota:f64,
@@ -28,6 +30,9 @@ impl Cursos{
         unidad.nota = nota;
         }
     }
+    pub fn sumar_notas(&mut self, leer_entrada())->String{
+
+    }
 
     
 }
@@ -41,7 +46,12 @@ struct Estudiantes{
 
 
 fn main() {
-
+    fn leer_entrada()->String{
+        let mut entrada:String=String::new();
+        io::stdout().flush().expect("Error en el forzamiento del búfer.");
+        io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
+        entrada.trim().to_string()
+    }
     
     println!("Hello, world!");
 }
