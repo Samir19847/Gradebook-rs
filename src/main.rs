@@ -1,4 +1,6 @@
 use std::io::{self, Write};
+use std::fmt;
+
 
 struct Unidad{
     letra:String,
@@ -79,7 +81,16 @@ enum Notas_invalidas{
     ErrorMasDe4(usize),
     
 }
-
+impl fmt::Display for Notas_invalidas{
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self{
+            Notas_invalidas::EntradaVacia => write!(f, "No ingresaste ninguna nota."),
+            Notas_invalidas::NotaNegativa(n) => write!(f, "La nota {} no puede ser negativa.", n),
+            Notas_invalidas::NumeroMayorA100(n) => write!(f, "La nota {} supera el máximo de 100.", n),
+            Notas_invalidas::ErrorMasDe4(cantidad) => write!(f, "Ingresaste {} notas, se esperaban solo 4.", cantidad),
+        }
+    }
+}
 struct Estudiantes{
     nombre: String,
     cursos:Vec<Cursos>,
@@ -93,6 +104,5 @@ fn main() {
         io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
         entrada.trim().to_string()
     }
-    let entrada=leer_entrada();
     println!("Hello, world!");
 }
