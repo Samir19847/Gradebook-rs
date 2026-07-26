@@ -30,22 +30,29 @@ impl Cursos{
         unidad.nota = nota;
         }
     }
-    pub fn sumar_notas(&self, entrada:String){
+    pub fn pedir_leer()->String{
         println!("Por favor, ingrese las notas finales de cada unidades\n(En orden-Separadas por espacios): ");
+        let mut entrada:String=String::new();
+        io::stdout().flush().expect("Error en el forzamiento del búfer.");
+        io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
+        entrada.trim().to_string()
+    }
+    pub fn conversionnumeros(entrada:String)->f64{
         let lista:Vec<f64>=entrada
             .split_whitespace()
             .filter_map(| x | x.parse::<f64>().ok())
             .collect();
         let total:f64=lista.iter().copied().fold(0.0, | suma, x| suma + x);
+        total
+    }
+    pub fn comparacion(&self, total:f64)->String{
         let diferencia:f64=self.nota_para_ganar-total;
-
         if total<self.nota_para_ganar{
-            println!("El estudiante perdió el curso de: {}.\nAlcanzó {} puntos de 240, le faltaron {} puntos", self.nombre, total, diferencia);
+            format!("El estudiante perdió el curso de: {}.\nAlcanzó {} puntos de 240, le faltaron {} puntos", self.nombre, total, diferencia)
         }
-        else{
-             println!("El estudiante ganó el curso de: {}.\nAlcanzó {} puntos de 240, felicidades.", self.nombre, total);
+        else {
+            format!("El estudiante ganó el curso de: {}.\nAlcanzó {} puntos de 240, felicidades.", self.nombre, total)
         }
-    
     }
 
     
