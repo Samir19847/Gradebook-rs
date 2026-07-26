@@ -58,9 +58,11 @@ impl Cursos{
             return Err(Notas_invalidas::ErrorMasDe4(lista.len()));
             }
             let total:f64=lista.iter().copied().fold(0.0, | suma, x| suma + x);
-            Ok(total)
+                Ok(total)
+             
+            }
         }
-    }
+
     pub fn comparacion(&self, total:f64)->String{
         let diferencia:f64=self.nota_para_ganar-total;
         if total<self.nota_para_ganar{
@@ -71,8 +73,8 @@ impl Cursos{
         }
     }
 
-    
 }
+
 
 enum Notas_invalidas{
     EntradaVacia,
@@ -81,6 +83,7 @@ enum Notas_invalidas{
     ErrorMasDe4(usize),
     
 }
+
 impl fmt::Display for Notas_invalidas{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self{
@@ -95,6 +98,11 @@ struct Estudiantes{
     nombre: String,
     cursos:Vec<Cursos>,
 }
+impl Estudiantes{
+    pub fn new(nombre:String)->Estudiantes{
+        Estudiantes { nombre, cursos: Vec::new() }
+    }
+}
 
 
 fn main() {
@@ -104,5 +112,55 @@ fn main() {
         io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
         entrada.trim().to_string()
     }
-    println!("Hello, world!");
+    let mut estudiantes:Vec<Estudiantes>=Vec::new();
+    loop {
+    println!("========================================");
+    println!("===                                  ===");
+    println!("===              LIBRO               ===");
+    println!("===                DE                ===");
+    println!("===          CALIFICACIONES          ===");
+    println!("===                                  ===");
+    println!("========================================");
+    println!();
+    println!("========================================");
+    println!("===          MENÚ PRINCIPAL          ===");
+    println!("========================================");
+    println!("===  1. Agregar estudiante           ===");
+    println!("===  2. Agregar/actualizar nota      ===");
+    println!("===  3. Ver boleta                   ===");
+    println!("===  4. Salir                        ===");
+    println!("========================================");
+    let mut opcion:i32=loop{
+        print!("Por favor, ingrese una opción del menú: ");
+        match leer_entrada().parse(){
+        Ok(v)=>break v,
+        Err(_)=>{
+            println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");
+            println!();
+        }    
+        }
+    };
+    println!();
+    match opcion{
+        1=>{
+
+        },
+        2=>{
+
+        },
+        3=>{
+
+        },
+        4=>{
+            println!("Cerrando programa..."); break;
+        }
+        _=>{
+            println!("Opción inválida...\nPor favor, ingrese una opción del menú: ");
+            println!();
+        },
+    }
 }
+    
+    
+}
+
