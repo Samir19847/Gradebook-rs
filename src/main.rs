@@ -30,8 +30,22 @@ impl Cursos{
         unidad.nota = nota;
         }
     }
-    pub fn sumar_notas(&mut self, leer_entrada())->String{
+    pub fn sumar_notas(&self, entrada:String){
+        println!("Por favor, ingrese las notas finales de cada unidades\n(En orden-Separadas por espacios): ");
+        let lista:Vec<f64>=entrada
+            .split_whitespace()
+            .filter_map(| x | x.parse::<f64>().ok())
+            .collect();
+        let total:f64=lista.iter().copied().fold(0.0, | suma, x| suma + x);
+        let diferencia:f64=self.nota_para_ganar-total;
 
+        if total<self.nota_para_ganar{
+            println!("El estudiante perdió el curso de: {}.\nAlcanzó {} puntos de 240, le faltaron {} puntos", self.nombre, total, diferencia);
+        }
+        else{
+             println!("El estudiante ganó el curso de: {}.\nAlcanzó {} puntos de 240, felicidades.", self.nombre, total);
+        }
+    
     }
 
     
@@ -52,6 +66,6 @@ fn main() {
         io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
         entrada.trim().to_string()
     }
-    
+    let entrada=leer_entrada();
     println!("Hello, world!");
 }
