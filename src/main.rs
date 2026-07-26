@@ -10,7 +10,7 @@ struct Cursos{
 }
 
 impl Cursos{
-    pub fn constructor(nombre:String)->Cursos{
+    pub fn new(nombre:String)->Cursos{
         Cursos {
             nombre,
             unidades: [
