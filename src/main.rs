@@ -96,11 +96,12 @@ impl fmt::Display for Notas_invalidas{
 }
 struct Estudiantes{
     nombre: String,
-    cursos:Vec<Cursos>,
+    clave: i32,
+    cursos: Vec<Cursos>,
 }
 impl Estudiantes{
-    pub fn new(nombre:String)->Estudiantes{
-        Estudiantes { nombre, cursos: Vec::new() }
+    pub fn new(nombre:String, clave: i32)->Estudiantes{
+        Estudiantes { nombre, clave, cursos: Vec::new() }
     }
 }
 
@@ -113,6 +114,7 @@ fn main() {
         entrada.trim().to_string()
     }
     let mut estudiantes:Vec<Estudiantes>=Vec::new();
+    let mut siguiente_clave: i32 = 1;
     loop {
     println!("========================================");
     println!("===                                  ===");
@@ -158,24 +160,77 @@ fn main() {
         for z in 1..=cantidad{
             print!("Por favor, ingrese el nombre completo del estudiante {z}: ");
             let mut nombre=leer_entrada();
-            let estudiantess=Estudiantes::new(nombre);
+            let estudiantess=Estudiantes::new(nombre, siguiente_clave);
             estudiantes.push(estudiantess);
+            siguiente_clave+=1;
 
         }
+        println!();
         println!("¡Estudiantes registrados correctamente!");
         println!();
     },
         2=>{
-
+            if estudiantes.len()<=0{
+                println!("Error: no se ha registrado ningún estudiante aún.\nSe necesita por lo menos tener agregado a un esutdiante para asignar cursos...");
+                println!();
+            }
+            else{
+                println!("========================================");
+                println!("===       LISTA DE ESTUDIANTES       ===");
+                println!("========================================");
+                println!();
+                for z in &estudiantes{
+                println!("Clave: {}. Nombre: {}",z.clave, z.nombre);
+                }
+                println!();
+                let mut opcion_estudiante: i32=loop{
+                    print!("Por favor, ingrese la clave del estudiante: ");
+                    match leer_entrada().parse(){
+                        Ok(v)=>break v,
+                        Err(_)=>{
+                            println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");
+                            println!();
+                        }
+                    }
+                };
+                if let Some(estudiante) = estudiantes.iter_mut().find(|x| x.clave == opcion_estudiante) {
+                    let materias: i32 = loop {
+                        print!("Por favor, ingrese la cantidad de cursos de ese estudiante: ");
+                        match leer_entrada().parse() {
+                            Ok(v) => break v,
+                            Err(_) => {
+                                println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");
+                                println!();
+                            }
+                        }
+                    };
+                for x in 1..=materias {
+                    print!("Por favor, ingrese el curso {x}: ");
+                    let nombre = leer_entrada();
+                    let curso = Cursos::new(nombre);
+                    estudiante.cursos.push(curso);
+                }
+                println!();
+                println!("¡Cursos agregados correctamente!");
+                } else {
+                    println!("No se encontró ningún estudiante con esa clave.");
+                }
+            }
         },
         3=>{
-
+            if estudiantes.len()<=0{
+                println!("Error: no se ha registrado ningún estudiante aún.\nSe necesita por lo menos tener agregado a un esutdiante para asignar cursos...");
+                println!();
+            }
         },
         4=>{
-
+            if estudiantes.len()<=0{
+                println!("Error: no se ha registrado ningún estudiante aún.\nSe necesita por lo menos tener agregado a un esutdiante para asignar cursos...");
+                println!();
+            }
         }
         5=>{
-             println!("Cerrando programa..."); break;
+             println!("Cerrando programa..."); 
         },
         _=>{
             println!("Opción inválida...\nPor favor, ingrese una opción del menú: ");
