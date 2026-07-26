@@ -126,9 +126,10 @@ fn main() {
     println!("===          MENÚ PRINCIPAL          ===");
     println!("========================================");
     println!("===  1. Agregar estudiante           ===");
-    println!("===  2. Agregar/actualizar nota      ===");
-    println!("===  3. Ver boleta                   ===");
-    println!("===  4. Salir                        ===");
+    println!("===  2. Agregar curso                ===");
+    println!("===  3. Agregar/actualizar nota      ===");
+    println!("===  4. Ver boleta                   ===");
+    println!("===  5. Salir                        ===");
     println!("========================================");
     let mut opcion:i32=loop{
         print!("Por favor, ingrese una opción del menú: ");
@@ -171,8 +172,11 @@ fn main() {
 
         },
         4=>{
-            println!("Cerrando programa..."); break;
+
         }
+        5=>{
+             println!("Cerrando programa..."); break;
+        },
         _=>{
             println!("Opción inválida...\nPor favor, ingrese una opción del menú: ");
             println!();
