@@ -179,7 +179,7 @@ fn main() {
                 println!("========================================");
                 println!();
                 for z in &estudiantes{
-                println!("Clave: {}. Nombre: {}",z.clave, z.nombre);
+                println!("Clave: {}. Nombre: {}.",z.clave, z.nombre);
                 }
                 println!();
                 let mut opcion_estudiante: i32=loop{
@@ -192,6 +192,7 @@ fn main() {
                         }
                     }
                 };
+                println!();
                 if let Some(estudiante) = estudiantes.iter_mut().find(|x| x.clave == opcion_estudiante) {
                     let materias: i32 = loop {
                         print!("Por favor, ingrese la cantidad de cursos de ese estudiante: ");
@@ -203,6 +204,7 @@ fn main() {
                             }
                         }
                     };
+                println!();
                 for x in 1..=materias {
                     print!("Por favor, ingrese el curso {x}: ");
                     let nombre = leer_entrada();
@@ -214,12 +216,17 @@ fn main() {
                 } else {
                     println!("No se encontró ningún estudiante con esa clave.");
                 }
+                println!();
             }
+            println!();
         },
         3=>{
             if estudiantes.len()<=0{
                 println!("Error: no se ha registrado ningún estudiante aún.\nSe necesita por lo menos tener agregado a un esutdiante para asignar cursos...");
                 println!();
+            }
+            else{
+            
             }
         },
         4=>{
