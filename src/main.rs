@@ -39,7 +39,7 @@ impl Cursos{
         io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
         entrada.trim().to_string()
     }
-    pub fn conversionnumeros(entrada:String)->Result<f64, Notas_invalidas>{
+    pub fn conversionnumeros(entrada:String)->Result<Vec<f64>, Notas_invalidas>{
         if entrada.is_empty(){
             return Err(Notas_invalidas::EntradaVacia);
         }
@@ -54,11 +54,10 @@ impl Cursos{
             else if let Some(mayor)=lista.iter().find(| x | **x>100.0){
                 return Err(Notas_invalidas::NumeroMayorA100(*mayor));
             }
-            else if lista.len() > 4 {
-            return Err(Notas_invalidas::ErrorMasDe4(lista.len()));
+            else if lista.len() > 4 || lista.len() <4 {
+            return Err(Notas_invalidas::ErrorEntradasMalas(lista.len()));
             }
-            let total:f64=lista.iter().copied().fold(0.0, | suma, x| suma + x);
-                Ok(total)
+                Ok(lista)
              
             }
         }
@@ -80,7 +79,7 @@ enum Notas_invalidas{
     EntradaVacia,
     NumeroMayorA100(f64),
     NotaNegativa(f64),
-    ErrorMasDe4(usize),
+    ErrorEntradasMalas(usize),
     
 }
 
@@ -90,7 +89,7 @@ impl fmt::Display for Notas_invalidas{
             Notas_invalidas::EntradaVacia => write!(f, "No ingresaste ninguna nota."),
             Notas_invalidas::NotaNegativa(n) => write!(f, "La nota {} no puede ser negativa.", n),
             Notas_invalidas::NumeroMayorA100(n) => write!(f, "La nota {} supera el máximo de 100.", n),
-            Notas_invalidas::ErrorMasDe4(cantidad) => write!(f, "Ingresaste {} notas, se esperaban solo 4.", cantidad),
+            Notas_invalidas::ErrorEntradasMalas(cantidad) => write!(f, "Ingresaste {} notas, se esperaban solo 4.", cantidad),
         }
     }
 }
