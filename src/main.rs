@@ -278,6 +278,7 @@ fn main() {
                         }
                     }
                     };
+                    println!();
                     if let Some(curso) = estudiante.cursos.iter_mut().find(|z| z.posicion == opcion_curso) {
                         let entrada = Cursos::pedir_leer();
                         match Cursos::conversionnumeros(entrada) {
@@ -308,7 +309,51 @@ fn main() {
                 println!("Error: no se ha registrado ningún estudiante aún.\nSe necesita por lo menos tener agregado a un esutdiante para asignar cursos...");
                 println!();
             }
-        }
+            else {
+                println!("========================================");
+                println!("===       LISTA DE ESTUDIANTES       ===");
+                println!("========================================");
+                println!();
+                for z in &estudiantes {
+                    println!("Clave: {}. Nombre: {}.", z.clave, z.nombre);
+                }
+                println!();
+                let opcion_estudiante: i32 = loop {
+                    print!("Por favor, ingrese la clave del estudiante: ");
+                    match leer_entrada().parse() {
+                        Ok(v) => break v,
+                        Err(_) => {
+                            println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");
+                            println!();
+                        }
+                    }
+                };
+                println!();
+                if let Some(estudiante) = estudiantes.iter().find(|x| x.clave == opcion_estudiante) {
+                    println!("========================================");
+                    println!("===  BOLETA DE: {}  ===", estudiante.nombre);
+                    println!("========================================");
+                    println!();
+                    if estudiante.cursos.len() <= 0 {
+                        println!("Este estudiante no tiene cursos registrados aún.");
+                    } else {
+                        for curso in &estudiante.cursos {
+                            println!("-_-_-_ {} _-_-_-_", curso.nombre);
+                            for unidad in curso.unidades.iter() {
+                                println!("  Unidad {}: {}", unidad.letra, unidad.nota);
+                            }
+                            let total: f64 = curso.unidades.iter().map(|u| u.nota).sum();
+                            println!("-_-_-_-_-_-_-_-_-_-_-_-_");
+                            println!("{}", curso.comparacion(total));
+                            println!();
+                        }
+                    }
+                } else {
+                    println!("No se encontró ningún estudiante con esa clave.");
+                }
+                println!();
+            }
+        },
         5=>{
              println!("Cerrando programa..."); 
         },
