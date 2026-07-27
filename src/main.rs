@@ -11,10 +11,11 @@ struct Cursos{
     nombre:String,
     unidades:[Unidad; 4],
     nota_para_ganar:f64,
+    posicion:i32,
 }
 
 impl Cursos{
-    pub fn new(nombre:String)->Cursos{
+    pub fn new(nombre:String, posicion:i32)->Cursos{
         Cursos {
             nombre,
             unidades: [
@@ -24,6 +25,7 @@ impl Cursos{
                 Unidad { letra: String::from("IV"), nota: 0.0 },
             ],
             nota_para_ganar: 240.0,
+            posicion,
         }
     }
     pub fn actualizar_notas(&mut self, numero_unidad:String, nota:f64){
@@ -114,6 +116,7 @@ fn main() {
     }
     let mut estudiantes:Vec<Estudiantes>=Vec::new();
     let mut siguiente_clave: i32 = 1;
+    let mut posicion=1;
     loop {
     println!("========================================");
     println!("===                                  ===");
@@ -180,7 +183,9 @@ fn main() {
                 println!();
                 for z in &estudiantes{
                 println!("Clave: {}. Nombre: {}.",z.clave, z.nombre);
-                }
+                } 
+                println!();
+                println!("========================================");
                 println!();
                 let mut opcion_estudiante: i32=loop{
                     print!("Por favor, ingrese la clave del estudiante: ");
@@ -208,8 +213,10 @@ fn main() {
                 for x in 1..=materias {
                     print!("Por favor, ingrese el curso {x}: ");
                     let nombre = leer_entrada();
-                    let curso = Cursos::new(nombre);
+                    let curso = Cursos::new(nombre, posicion);
+                    posicion+=1;
                     estudiante.cursos.push(curso);
+            
                 }
                 println!();
                 println!("¡Cursos agregados correctamente!");
@@ -226,7 +233,74 @@ fn main() {
                 println!();
             }
             else{
-            
+                println!("========================================");
+                println!("===       LISTA DE ESTUDIANTES       ===");
+                println!("========================================");
+                println!();
+                for z in &estudiantes{
+                    println!("Clave: {}. Nombre: {}.", z.clave, z.nombre);
+                }
+                println!();
+                println!("========================================");
+                println!();
+                let mut opcion_estudiantee: i32=loop{
+                    print!("Por favor, ingrese la clave del estudiante: ");
+                    match leer_entrada().parse(){
+                        Ok(v)=>break v,
+                        Err(_)=>{
+                            println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");
+                            println!();
+                        }
+                    }
+                };
+                println!();
+                if let Some(estudiante)=estudiantes.iter_mut().find(|x| x.clave==opcion_estudiantee){
+                    println!("=========================================");
+                    println!("===          LISTA DE CURSOS          ===");
+                    println!("=========================================");
+                    let mut contador=1;
+                    println!();
+                    for cursos in &estudiante.cursos  {
+                        println!("{}. {}",contador, cursos.nombre);
+                        contador+=1;
+                        
+                    }
+                    println!();
+                    println!("========================================");
+                    println!();
+                    let mut opcion_curso: i32=loop{
+                    print!("Por favor ingrese el número del curso, al que le desea agregar las notas: ");
+                    match leer_entrada().parse(){
+                        Ok(v)=>break v,
+                        Err(_)=>{
+                            println!("Error: Tipo de dato incorrecto, por favor, ingrese un número...");
+                            println!();
+                        }
+                    }
+                    };
+                    if let Some(curso) = estudiante.cursos.iter_mut().find(|z| z.posicion == opcion_curso) {
+                        let entrada = Cursos::pedir_leer();
+                        match Cursos::conversionnumeros(entrada) {
+                            Ok(lista) => {
+                                for (unidad, nota) in curso.unidades.iter_mut().zip(lista.iter()) {
+                                    unidad.nota = *nota;
+                                }
+                                let total: f64 = lista.iter().sum();
+                                println!();
+                                println!("{}", curso.comparacion(total));
+                            }
+                            Err(e) => {
+                                println!();
+                                println!("Error: {}", e);
+                            }
+                        }
+                    }   
+                }else {
+                    println!();
+                    println!("No se encontró ningún estudiante con esa clave.");
+                    println!();    
+                }
+                println!();
             }
         },
         4=>{
