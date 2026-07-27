@@ -288,7 +288,6 @@ fn main() {
                                 }
                                 let total: f64 = lista.iter().sum();
                                 println!();
-                                println!("{}", curso.comparacion(total));
                             }
                             Err(e) => {
                                 println!();
@@ -344,6 +343,7 @@ fn main() {
                             }
                             let total: f64 = curso.unidades.iter().map(|u| u.nota).sum();
                             println!("-_-_-_-_-_-_-_-_-_-_-_-_");
+                            println!();
                             println!("{}", curso.comparacion(total));
                             println!();
                         }
