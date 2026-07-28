@@ -294,7 +294,9 @@ fn main() {
                                 println!("Error: {}", e);
                             }
                         }
-                    }   
+                    }  
+                    println!();
+                    println!("¡Notas agregadas correctamente!"); 
                 }else {
                     println!();
                     println!("No se encontró ningún estudiante con esa clave.");
