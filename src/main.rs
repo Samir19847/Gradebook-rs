@@ -114,6 +114,10 @@ fn main() {
         io::stdin().read_line(&mut entrada).expect("Error en la lectura de la línea");
         entrada.trim().to_string()
     }
+    fn nombre_valido(nombre:&str)->bool{
+        !nombre.chars().any(| x | x.is_numeric())
+    }
+    
     let mut estudiantes:Vec<Estudiantes>=Vec::new();
     let mut siguiente_clave: i32 = 1;
     let mut posicion=1;
@@ -160,11 +164,19 @@ fn main() {
         };
         println!();
         for z in 1..=cantidad{
-            print!("Por favor, ingrese el nombre completo del estudiante {z}: ");
-            let mut nombre=leer_entrada();
-            let estudiantess=Estudiantes::new(nombre, siguiente_clave);
-            estudiantes.push(estudiantess);
-            siguiente_clave+=1;
+            let mut nombre:String=loop {
+                print!("Por favor, ingrese el nombre completo del estudiante {z}: ");
+                let entrada=leer_entrada();
+                if nombre_valido(&entrada){
+                    break entrada
+                }
+                else{
+                println!("Error: el nombre no puede contener números, ingréselo de nuevo.");
+                println!();continue; }
+                };
+                let estudiantess=Estudiantes::new(nombre, siguiente_clave);
+                estudiantes.push(estudiantess);
+                siguiente_clave+=1; 
 
         }
         println!();
@@ -216,7 +228,6 @@ fn main() {
                     let curso = Cursos::new(nombre, posicion);
                     posicion+=1;
                     estudiante.cursos.push(curso);
-            
                 }
                 println!();
                 println!("¡Cursos agregados correctamente!");
@@ -295,7 +306,6 @@ fn main() {
                             }
                         }
                     }  
-                    println!();
                     println!("¡Notas agregadas correctamente!"); 
                 }else {
                     println!();
