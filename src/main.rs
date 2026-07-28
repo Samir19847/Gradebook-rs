@@ -4,7 +4,7 @@ use std::fmt;
 
 struct Unidad{
     letra:String,
-    nota:f64,
+    nota:Option<f64>,
 }
 
 struct Cursos{
@@ -19,10 +19,10 @@ impl Cursos{
         Cursos {
             nombre,
             unidades: [
-                Unidad { letra: String::from("I"), nota: 0.0 },
-                Unidad { letra: String::from("II"), nota: 0.0 },
-                Unidad { letra: String::from("III"), nota: 0.0 },
-                Unidad { letra: String::from("IV"), nota: 0.0 },
+                Unidad { letra: String::from("I"), nota: None },
+                Unidad { letra: String::from("II"), nota: None },
+                Unidad { letra: String::from("III"), nota: None },
+                Unidad { letra: String::from("IV"), nota: None },
             ],
             nota_para_ganar: 240.0,
             posicion,
@@ -31,7 +31,7 @@ impl Cursos{
     pub fn actualizar_notas(&mut self, numero_unidad:String, nota:f64){
         if let Some(unidad) = self.unidades.iter_mut().find(|u| *u.letra == numero_unidad) 
         {
-        unidad.nota = nota;
+        unidad.nota = Some(nota);
         }
     }
     pub fn pedir_leer()->String{
@@ -64,14 +64,22 @@ impl Cursos{
             }
         }
 
-    pub fn comparacion(&self, total:f64)->String{
-        let diferencia:f64=self.nota_para_ganar-total;
-        if total<self.nota_para_ganar{
-            format!("El estudiante perdió el curso de: {}.\nAlcanzó {} puntos de 240, le faltaron {} puntos", self.nombre, total, diferencia)
+    pub fn comparacion(&self)->String{
+          let sin_calificar = self.unidades.iter().filter(|u| u.nota.is_none()).count();
+
+        if sin_calificar > 0 {
+            format!("El curso {} está en progreso. Faltan {} unidad(es) por calificar.", self.nombre, sin_calificar)
         }
         else {
-            format!("El estudiante ganó el curso de: {}.\nAlcanzó {} puntos de 240, felicidades.", self.nombre, total)
-        }
+            let total: f64 = self.unidades.iter().filter_map(|u| u.nota).sum();
+            let diferencia = self.nota_para_ganar - total;
+            if total < self.nota_para_ganar {
+                format!("El estudiante perdió el curso de: {}.\nAlcanzó {} puntos de 240, le faltaron {} puntos", self.nombre, total, diferencia)
+            } else {
+                format!("El estudiante ganó el curso de: {}.\nAlcanzó {} puntos de 240, felicidades.", self.nombre, total)
+            }
+    }
+
     }
 
 }
@@ -295,7 +303,7 @@ fn main() {
                         match Cursos::conversionnumeros(entrada) {
                             Ok(lista) => {
                                 for (unidad, nota) in curso.unidades.iter_mut().zip(lista.iter()) {
-                                    unidad.nota = *nota;
+                                    unidad.nota = Some(*nota);
                                 }
                                 let total: f64 = lista.iter().sum();
                                 println!();
@@ -351,12 +359,14 @@ fn main() {
                         for curso in &estudiante.cursos {
                             println!("-_-_-_ {} _-_-_-_", curso.nombre);
                             for unidad in curso.unidades.iter() {
-                                println!("  Unidad {}: {}", unidad.letra, unidad.nota);
+                                match unidad.nota {
+                                    Some(n) => println!("  Unidad {}: {}", unidad.letra, n),
+                                    None => println!("  Unidad {}: Sin calificar", unidad.letra),
+                                }
                             }
-                            let total: f64 = curso.unidades.iter().map(|u| u.nota).sum();
                             println!("-_-_-_-_-_-_-_-_-_-_-_-_");
                             println!();
-                            println!("{}", curso.comparacion(total));
+                            println!("{}", curso.comparacion());
                             println!();
                         }
                     }
