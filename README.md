@@ -15,7 +15,7 @@ El programa corre en consola con un menú interactivo:
 ## Cómo ejecutarlo
 
 ```bash
-git clone https://github.com/<tu-usuario>/gradebook-rs.git
+git clone https://github.com/<Samir19847>/gradebook-rs.git
 cd gradebook-rs
 cargo run
 ```
